@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Home, FileText, Settings, Mail, LogOut } from "lucide-react";
+import { Home, FileText, Settings, Mail, LogOut, Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { logout } from "@/app/actions/auth";
 
@@ -12,6 +12,11 @@ const navItems = [
     title: "首页",
     href: "/",
     icon: Home,
+  },
+  {
+    title: "导航中心",
+    href: "/navigation",
+    icon: Compass,
   },
   {
     title: "记录管理",
