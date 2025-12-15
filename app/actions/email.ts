@@ -31,7 +31,10 @@ export async function updateEmailConfig(configData: any) {
     return { success: true, message: '邮件配置更新成功' };
   } catch (error) {
     console.error('更新邮件配置失败:', error);
-    throw new Error('更新邮件配置失败: ' + (error instanceof Error ? error.message : '未知错误'));
+    return {
+      success: false,
+      error: '更新邮件配置失败: ' + (error instanceof Error ? error.message : '未知错误')
+    };
   }
 }
 
@@ -97,7 +100,10 @@ export async function updateNotificationSettings(settingsData: any) {
     return { success: true, message: '通知设置更新成功' };
   } catch (error) {
     console.error('更新通知设置失败:', error);
-    throw new Error('更新通知设置失败: ' + (error instanceof Error ? error.message : '未知错误'));
+    return {
+      success: false,
+      error: '更新通知设置失败: ' + (error instanceof Error ? error.message : '未知错误')
+    };
   }
 }
 
@@ -143,7 +149,10 @@ export async function updateUserEmail(email: string) {
     return { success: true, message: '邮箱地址更新成功' };
   } catch (error) {
     console.error('更新邮箱地址失败:', error);
-    throw new Error('更新邮箱地址失败: ' + (error instanceof Error ? error.message : '未知错误'));
+    return {
+      success: false,
+      error: '更新邮箱地址失败: ' + (error instanceof Error ? error.message : '未知错误')
+    };
   }
 }
 
@@ -221,7 +230,7 @@ export async function sendMonthlyBill(yearMonth: string) {
 
     const template = emailTemplateService.generateMonthlyBill({
       yearMonth,
-      records,
+      records: record,
       settings,
     });
 

@@ -138,7 +138,7 @@ export class EmailService {
             status: EmailStatus.PENDING,
           },
           orderBy: {
-            createdAt: 'desc',
+            sentAt: 'desc',
           },
         });
 

@@ -23,7 +23,7 @@ interface Record {
   hotWaterCost: number;
   totalAmount: number;
   isPaid: boolean;
-  notes: string | null;
+  note: string | null;
   createdAt: Date;
   updatedAt: Date;
 }

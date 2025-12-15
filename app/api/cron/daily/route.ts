@@ -98,7 +98,6 @@ export async function GET(request: NextRequest) {
       if (daysSincePayment > 0 && daysSincePayment <= 7) {
         try {
           const template = emailTemplateService.generateOverdueReminder({
-            paymentDay,
             overdueDays: daysSincePayment,
             monthlyRent: settings.monthlyRent,
             dueDate: calculateLastDueDate(paymentDay),

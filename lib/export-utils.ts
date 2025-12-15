@@ -67,7 +67,7 @@ export async function exportRecordsToExcel(
         hotWaterCost: Number(record.hotWaterCost.toFixed(2)),
         totalAmount: Number(record.totalAmount.toFixed(2)),
         isPaid: record.isPaid ? "已支付" : "未支付",
-        notes: record.notes || "",
+        notes: record.note || "",
       });
     });
 

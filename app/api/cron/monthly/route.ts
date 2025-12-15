@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
     try {
       const template = emailTemplateService.generateMonthlyBill({
         yearMonth,
-        records,
+        records: record,
         settings,
       });
 
