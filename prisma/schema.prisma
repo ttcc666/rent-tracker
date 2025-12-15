@@ -1,0 +1,72 @@
+// Prisma Schema for 租金跟踪系统
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 系统配置表（单例模式，只有一条记录）
+model SystemConfig {
+  id        Int      @id @default(1)
+  password  String   // bcrypt 加密的密码
+  isSetup   Boolean  @default(false) // 是否已完成初始设置
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("system_config")
+}
+
+// 租金设置表（单例模式，只有一条记录）
+model Settings {
+  id              Int      @id @default(1)
+  monthlyRent     Float    // 月租金
+  paymentDay      Int      // 付款日（1-31）
+  deposit         Float    // 押金
+  electricityRate Float    // 电费单价（元/度）
+  coldWaterRate   Float    // 冷水单价（元/吨）
+  hotWaterRate    Float    // 热水单价（元/吨）
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("settings")
+}
+
+// 租金记录表
+model Record {
+  id                 Int      @id @default(autoincrement())
+  yearMonth          String   // 格式：YYYY-MM
+
+  // 用电
+  electricityUsage   Float    // 用电量（度）
+  electricityCost    Float    // 用电成本
+
+  // 冷水
+  coldWaterUsage     Float    // 冷水用量（吨）
+  coldWaterCost      Float    // 冷水成本
+
+  // 热水
+  hotWaterUsage      Float    // 热水用量（吨）
+  hotWaterCost       Float    // 热水成本
+
+  // 总计
+  totalAmount        Float    // 总金额（租金 + 所有费用）
+
+  // 状态
+  isPaid             Boolean  @default(false) // 是否已支付
+
+  // 备注
+  note               String?  // 备注（可选）
+
+  // 时间戳
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([yearMonth]) // 每个月只能有一条记录
+  @@index([yearMonth]) // 索引优化查询
+  @@index([isPaid]) // 按支付状态查询优化
+  @@map("records")
+}
