@@ -4,6 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { CountdownCard } from "@/components/dashboard/countdown-card";
 import { SummaryCards } from "@/components/dashboard/summary-cards";
 import { RecordsTable } from "@/components/dashboard/records-table";
+import { CostTrendChart } from "@/components/dashboard/cost-trend-chart";
+import { UsageComparisonChart } from "@/components/dashboard/usage-comparison-chart";
 import { getSettings } from "@/app/actions/settings";
 import { getRecords, getCurrentMonthRecord } from "@/app/actions/records";
 import { getCurrentYearMonth } from "@/lib/date-utils";
@@ -95,6 +97,14 @@ export default async function DashboardPage() {
             </Link>
           </CardContent>
         </Card>
+      )}
+
+      {/* 数据可视化图表 */}
+      {allRecords.length > 0 && (
+        <div className="grid gap-6 md:grid-cols-2">
+          <CostTrendChart records={allRecords} monthlyRent={settings.monthlyRent} />
+          <UsageComparisonChart records={allRecords} />
+        </div>
       )}
 
       {/* 历史记录 */}

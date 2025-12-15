@@ -11,6 +11,7 @@
 - PostgreSQL + Prisma ORM
 - JWT 会话管理 (jose)
 - bcryptjs 密码加密
+- Recharts 图表库
 
 ## 🚀 快速开始
 
@@ -291,6 +292,11 @@ pnpm dev
 ### UI 组件
 - `components/ui/` - Shadcn UI 基础组件
 - `components/dashboard/` - 仪表盘专用组件
+  - `cost-trend-chart.tsx` - 费用趋势图（折线图）
+  - `usage-comparison-chart.tsx` - 用量对比图（柱状图）
+  - `countdown-card.tsx` - 付款倒计时卡片
+  - `summary-cards.tsx` - 汇总卡片
+  - `records-table.tsx` - 记录表格
 - `components/layout/` - 布局组件（导航栏等）
 
 ## 🛠️ 开发命令
@@ -341,6 +347,63 @@ node check-db.js            # 检查数据库状态（自定义脚本）
 → 保存到 Record 表 → 返回成功 → 刷新页面
 ```
 
+## 📊 数据可视化功能
+
+### 费用趋势图 (CostTrendChart)
+**文件**：`components/dashboard/cost-trend-chart.tsx`
+
+**功能**：
+- 使用 Recharts 折线图展示最近 12 个月的费用变化
+- 三条折线：租金（蓝色）、水电费（橙色）、总费用（绿色）
+- 自定义 Tooltip 显示详细金额
+- 响应式设计，自适应容器宽度
+
+**数据处理**：
+```typescript
+// 将记录转换为图表数据格式
+const chartData = records.slice(0, 12).reverse().map((record) => ({
+  month: record.yearMonth,
+  租金: monthlyRent,
+  水电费: electricityCost + coldWaterCost + hotWaterCost,
+  总费用: record.totalAmount,
+}));
+```
+
+### 用量对比图 (UsageComparisonChart)
+**文件**：`components/dashboard/usage-comparison-chart.tsx`
+
+**功能**：
+- 使用 Recharts 柱状图展示最近 12 个月的用量对比
+- 三组柱状：电量（蓝色）、冷水（青色）、热水（橙色）
+- 自定义 Tooltip 显示单位（度/吨）
+- 圆角柱状图设计
+
+**数据处理**：
+```typescript
+// 将记录转换为图表数据格式
+const chartData = records.slice(0, 12).reverse().map((record) => ({
+  month: record.yearMonth,
+  电量: record.electricityUsage,
+  冷水: record.coldWaterUsage,
+  热水: record.hotWaterUsage,
+}));
+```
+
+### 集成方式
+在仪表盘页面 (`app/(dashboard)/page.tsx`) 中：
+```typescript
+{allRecords.length > 0 && (
+  <div className="grid gap-6 md:grid-cols-2">
+    <CostTrendChart records={allRecords} monthlyRent={settings.monthlyRent} />
+    <UsageComparisonChart records={allRecords} />
+  </div>
+)}
+```
+
+**显示条件**：
+- 只有当存在记录数据时才显示图表
+- 使用响应式网格布局（桌面端并排，移动端堆叠）
+
 ## 🎨 UI 设计规范
 
 ### 颜色方案
@@ -357,9 +420,9 @@ node check-db.js            # 检查数据库状态（自定义脚本）
 
 ## 🔄 扩展方向
 
-1. **数据可视化**
-   - 使用 Recharts 添加月度费用趋势图
-   - 水电使用量对比图
+1. **数据可视化** ✅ 已完成
+   - ✅ 使用 Recharts 添加月度费用趋势图
+   - ✅ 水电使用量对比图
 
 2. **导出功能**
    - 导出为 PDF 账单
