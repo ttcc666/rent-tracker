@@ -1,4 +1,14 @@
 {
   "buildCommand": "prisma generate && prisma migrate deploy && next build",
-  "installCommand": "pnpm install"
+  "installCommand": "pnpm install",
+  "crons": [
+    {
+      "path": "/api/cron/daily",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/monthly",
+      "schedule": "0 1 1 * *"
+    }
+  ]
 }

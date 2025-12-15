@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getSettings, updateSettings } from "@/app/actions/settings";
 import { changePassword } from "@/app/actions/auth";
+import Link from "next/link";
+import { Mail, ArrowRight } from "lucide-react";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -304,6 +306,38 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
       </form>
+
+      {/* 邮件设置 */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Mail className="w-5 h-5" />
+            邮件设置
+          </CardTitle>
+          <CardDescription>配置邮件提醒服务</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              设置邮件服务以接收付款提醒、逾期通知和月度账单。
+            </p>
+            <div className="flex items-center justify-between p-4 border rounded-lg bg-muted/30">
+              <div>
+                <h4 className="font-medium">邮件提醒服务</h4>
+                <p className="text-sm text-muted-foreground mt-1">
+                  付款提醒 • 逾期通知 • 月度账单 • 系统通知
+                </p>
+              </div>
+              <Link href="/settings/email">
+                <Button variant="outline" className="flex items-center gap-2">
+                  配置邮件
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

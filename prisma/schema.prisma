@@ -29,8 +29,12 @@ model Settings {
   electricityRate Float    // 电费单价（元/度）
   coldWaterRate   Float    // 冷水单价（元/吨）
   hotWaterRate    Float    // 热水单价（元/吨）
+  email           String?  // 用户邮箱地址
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  // 关联邮件配置
+  emailConfig     EmailConfig?
 
   @@map("settings")
 }
@@ -69,4 +73,72 @@ model Record {
   @@index([yearMonth]) // 索引优化查询
   @@index([isPaid]) // 按支付状态查询优化
   @@map("records")
+}
+
+// 邮件配置表（单例模式，只有一条记录）
+model EmailConfig {
+  id             Int      @id @default(1)
+  smtpHost       String   // SMTP服务器地址
+  smtpPort       Int      @default(587) // SMTP端口
+  smtpSecure     Boolean  @default(false) // 是否使用SSL
+  smtpUser       String   // SMTP用户名
+  smtpPassword   String   // SMTP密码（加密存储）
+  fromName       String   @default("租金跟踪系统") // 发件人名称
+  fromEmail      String   // 发件人邮箱
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // 关联设置
+  settings       Settings @relation(fields: [id], references: [id])
+
+  @@map("email_config")
+}
+
+// 邮件日志表
+model EmailLog {
+  id            Int      @id @default(autoincrement())
+  toEmail       String   // 收件人邮箱
+  subject       String   // 邮件主题
+  content       String   // 邮件内容（HTML格式）
+  type          EmailType // 邮件类型
+  status        EmailStatus // 发送状态
+  errorMessage  String?  // 错误信息
+  sentAt        DateTime @default(now()) // 发送时间
+
+  @@index([toEmail])
+  @@index([type])
+  @@index([status])
+  @@index([sentAt])
+  @@map("email_logs")
+}
+
+// 通知设置表（单例模式，只有一条记录）
+model NotificationSettings {
+  id                          Int      @id @default(1)
+  paymentReminderEnabled      Boolean  @default(true) // 付款提醒开关
+  paymentReminderDays         Int      @default(3) // 付款提醒天数
+  overdueReminderEnabled      Boolean  @default(true) // 逾期提醒开关
+  monthlyBillEnabled          Boolean  @default(true) // 月度账单开关
+  systemNotificationEnabled   Boolean  @default(true) // 系统通知开关
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+
+  @@map("notification_settings")
+}
+
+// 邮件类型枚举
+enum EmailType {
+  PAYMENT_REMINDER    // 付款提醒
+  OVERDUE_REMINDER    // 逾期提醒
+  MONTHLY_BILL        // 月度账单
+  SYSTEM_NOTIFICATION // 系统通知
+  TEST_EMAIL          // 测试邮件
+}
+
+// 邮件状态枚举
+enum EmailStatus {
+  PENDING   // 待发送
+  SENT      // 已发送
+  FAILED    // 发送失败
+  RETRYING  // 重试中
 }

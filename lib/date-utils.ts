@@ -56,3 +56,15 @@ export function formatYearMonthChinese(yearMonth: string): string {
   const date = parseYearMonth(yearMonth);
   return format(date, "yyyy年MM月", { locale: zhCN });
 }
+
+/**
+ * 格式化货币显示
+ */
+export function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('zh-CN', {
+    style: 'currency',
+    currency: 'CNY',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+}

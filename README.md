@@ -11,6 +11,9 @@
 - ✅ **支付跟踪** - 标记记录的支付状态
 - ✅ **倒计时提醒** - 显示距离付款日的剩余天数
 - ✅ **数据可视化** - 费用趋势图和用量对比图（最近12个月）
+- ✅ **邮件提醒** - 支持付款提醒、逾期提醒、月度账单等邮件通知
+- ✅ **邮件管理** - SMTP 配置、测试连接、发送测试邮件
+- ✅ **Excel 导出** - 将租金记录导出为 Excel 文件
 - ✅ **响应式设计** - 适配桌面和移动设备
 
 ## 技术栈
@@ -21,6 +24,8 @@
 - **数据库**: PostgreSQL (通过 Prisma ORM)
 - **认证**: JWT (jose) + bcryptjs
 - **图表**: Recharts
+- **邮件**: nodemailer
+- **数据导出**: exceljs
 - **包管理器**: pnpm
 
 ## 快速开始
@@ -107,6 +112,23 @@ pnpm dev
 - 修改租金配置
 - 修改水电费单价
 - 修改登录密码
+- 配置邮件服务（SMTP）
+- 设置邮件提醒规则
+
+### 邮件管理
+
+- **邮件配置** - 支持多种邮箱服务商（QQ邮箱、Gmail、163邮箱等）
+- **SMTP 设置** - 配置 SMTP 服务器、端口、认证信息
+- **连接测试** - 测试 SMTP 配置是否正确
+- **测试邮件** - 发送测试邮件验证功能
+- **通知设置** - 配置付款提醒、逾期提醒、月度账单等
+- **邮件日志** - 查看邮件发送历史记录
+
+### 数据导出
+
+- 导出单月记录为 Excel 文件
+- 导出多月记录为 Excel 文件（多工作表）
+- 自动包含费用汇总和图表
 
 ## 项目结构
 
@@ -116,11 +138,16 @@ rent-tracker/
 │   ├── (dashboard)/          # 仪表盘路由组
 │   │   ├── page.tsx          # 首页
 │   │   ├── records/          # 记录管理
+│   │   ├── email/            # 邮件管理
 │   │   └── settings/         # 设置页面
+│   │       └── email/        # 邮件设置
 │   ├── actions/              # Server Actions
 │   │   ├── auth.ts           # 认证操作
 │   │   ├── settings.ts       # 设置操作
-│   │   └── records.ts        # 记录操作
+│   │   ├── records.ts        # 记录操作
+│   │   └── email.ts          # 邮件操作
+│   ├── api/                  # API 路由
+│   │   └── export-excel/     # Excel 导出接口
 │   ├── login/                # 登录页面
 │   ├── setup/                # 首次设置页面
 │   ├── layout.tsx            # 根布局
@@ -134,6 +161,9 @@ rent-tracker/
 │   ├── session.ts            # 会话管理
 │   ├── calculations.ts       # 费用计算
 │   ├── date-utils.ts         # 日期工具
+│   ├── email.ts              # 邮件服务
+│   ├── email-templates.ts    # 邮件模板
+│   ├── email-validation.ts   # 邮件配置验证
 │   └── utils.ts              # 通用工具
 ├── prisma/
 │   └── schema.prisma         # 数据模型
@@ -154,6 +184,7 @@ rent-tracker/
 - 电费单价
 - 冷水单价
 - 热水单价
+- 用户邮箱地址
 
 ### Record（租金记录）
 - 年月（YYYY-MM）
@@ -164,9 +195,34 @@ rent-tracker/
 - 是否已支付
 - 备注
 
+### EmailConfig（邮件配置）
+- SMTP 服务器地址
+- SMTP 端口
+- SSL/TLS 设置
+- SMTP 用户名
+- SMTP 密码
+- 发件人名称
+- 发件人邮箱
+
+### EmailLog（邮件日志）
+- 收件人邮箱
+- 邮件主题
+- 邮件内容
+- 邮件类型（付款提醒/逾期提醒/月度账单/测试邮件）
+- 发送状态（待发送/已发送/发送失败）
+- 发送时间
+
+### NotificationSettings（通知设置）
+- 付款提醒开关
+- 付款提醒天数
+- 逾期提醒开关
+- 月度账单开关
+- 系统通知开关
+
 ## 安全特性
 
 - ✅ 密码使用 bcrypt 加密（成本因子 10）
+- ✅ 邮件密码加密存储
 - ✅ 会话使用 JWT 令牌（HttpOnly Cookie）
 - ✅ 会话有效期 7 天
 - ✅ 路由保护中间件
@@ -201,9 +257,11 @@ pnpm prisma studio        # 打开数据库管理界面
 1. 推送代码到 GitHub
 2. 在 Vercel 导入项目
 3. 配置环境变量：
-   - `DATABASE_URL`
-   - `AUTH_SECRET`
+   - `DATABASE_URL` - PostgreSQL 数据库连接字符串
+   - `AUTH_SECRET` - JWT 认证密钥（至少 32 字符）
 4. 部署
+
+**注意**：邮件配置需要在部署后通过应用界面进行设置。
 
 ### 自托管部署
 
@@ -217,6 +275,56 @@ pnpm prisma migrate deploy
 # 启动
 pnpm start
 ```
+
+## 邮件配置指南
+
+### 支持的邮箱服务商
+
+- **QQ 邮箱** - smtp.qq.com:587（推荐使用授权码）
+- **Gmail** - smtp.gmail.com:587（需要应用专用密码）
+- **163 邮箱** - smtp.163.com:465
+- **126 邮箱** - smtp.126.com:465
+- **Outlook** - smtp-mail.outlook.com:587
+- **阿里企业邮箱** - smtp.mxhichina.com:587
+- **腾讯企业邮箱** - smtp.exmail.qq.com:587
+
+### QQ 邮箱配置示例
+
+1. 登录 QQ 邮箱 → 设置 → 账户
+2. 找到"POP3/IMAP/SMTP/Exchange/CardDAV/CalDAV服务"
+3. 开启"SMTP服务"
+4. 生成授权码并保存
+5. 在应用中配置：
+   - SMTP 服务器：`smtp.qq.com`
+   - 端口：`587`
+   - 使用 SSL/TLS：`关闭`（使用 STARTTLS）
+   - 用户名：完整邮箱地址
+   - 密码：使用生成的授权码
+
+### Gmail 配置示例
+
+1. 启用两步验证
+2. 生成应用专用密码
+3. 在应用中配置：
+   - SMTP 服务器：`smtp.gmail.com`
+   - 端口：`587`
+   - 使用 SSL/TLS：`关闭`（使用 STARTTLS）
+   - 用户名：完整邮箱地址
+   - 密码：使用应用专用密码
+
+### 常见问题
+
+**Q: 测试连接失败？**
+- 检查 SMTP 服务器地址和端口是否正确
+- 确认邮箱服务已开启 SMTP 功能
+- 使用授权码而不是邮箱密码
+- 检查 SSL/TLS 设置是否匹配端口
+
+**Q: 邮件发送失败？**
+- 确认用户邮箱地址已设置
+- 检查 SMTP 配置是否保存
+- 查看邮件日志获取详细错误信息
+- 检查网络连接和防火墙设置
 
 ## 许可证
 
