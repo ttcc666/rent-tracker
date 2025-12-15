@@ -91,3 +91,5 @@ coverage/
 
 # 调试脚本（可选，如果不想提交）
 # check-db.js
+
+.claude/

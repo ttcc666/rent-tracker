@@ -2,12 +2,24 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { RecordsTable } from "@/components/dashboard/records-table";
-import { getRecords } from "@/app/actions/records";
+import { getRecords, getStatistics } from "@/app/actions/records";
+import { ExportButton } from "@/components/dashboard/export-button";
 import { Plus } from "lucide-react";
 
 export default async function RecordsPage() {
   const result = await getRecords();
   const records = result.data || [];
+
+  // 获取统计数据
+  const statsResult = await getStatistics();
+  const statistics = statsResult.data || {
+    totalRecords: 0,
+    paidRecords: 0,
+    unpaidRecords: 0,
+    totalAmount: 0,
+    paidAmount: 0,
+    unpaidAmount: 0,
+  };
 
   return (
     <div className="space-y-6">
@@ -19,12 +31,15 @@ export default async function RecordsPage() {
             查看和管理所有租金记录
           </p>
         </div>
-        <Link href="/records/new">
-          <Button>
-            <Plus className="h-4 w-4 mr-2" />
-            新建记录
-          </Button>
-        </Link>
+        <div className="flex gap-2">
+          <ExportButton records={records} statistics={statistics} />
+          <Link href="/records/new">
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              新建记录
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* 记录表格 */}
