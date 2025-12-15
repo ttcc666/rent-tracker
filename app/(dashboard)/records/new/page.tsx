@@ -132,6 +132,7 @@ export default function NewRecordPage() {
                 onChange={(e) => setYearMonth(e.target.value)}
                 required
                 disabled={loading}
+                autoComplete="off"
               />
             </div>
 
@@ -147,6 +148,7 @@ export default function NewRecordPage() {
                   onChange={(e) => setElectricityUsage(e.target.value)}
                   required
                   disabled={loading}
+                  autoComplete="off"
                 />
                 <p className="text-xs text-muted-foreground">
                   单价：{formatCurrency(settings.electricityRate)}/度
@@ -164,6 +166,7 @@ export default function NewRecordPage() {
                   onChange={(e) => setColdWaterUsage(e.target.value)}
                   required
                   disabled={loading}
+                  autoComplete="off"
                 />
                 <p className="text-xs text-muted-foreground">
                   单价：{formatCurrency(settings.coldWaterRate)}/吨
@@ -181,6 +184,7 @@ export default function NewRecordPage() {
                   onChange={(e) => setHotWaterUsage(e.target.value)}
                   required
                   disabled={loading}
+                  autoComplete="off"
                 />
                 <p className="text-xs text-muted-foreground">
                   单价：{formatCurrency(settings.hotWaterRate)}/吨
@@ -197,6 +201,7 @@ export default function NewRecordPage() {
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 disabled={loading}
+                autoComplete="off"
               />
             </div>
           </CardContent>

@@ -146,6 +146,7 @@ export default function SettingsPage() {
                     onChange={(e) => setMonthlyRent(e.target.value)}
                     required
                     disabled={loading}
+                    autoComplete="off"
                   />
                 </div>
 
@@ -160,6 +161,7 @@ export default function SettingsPage() {
                     onChange={(e) => setPaymentDay(e.target.value)}
                     required
                     disabled={loading}
+                    autoComplete="off"
                   />
                 </div>
               </div>
@@ -174,6 +176,7 @@ export default function SettingsPage() {
                   onChange={(e) => setDeposit(e.target.value)}
                   required
                   disabled={loading}
+                  autoComplete="off"
                 />
               </div>
             </div>
@@ -192,6 +195,7 @@ export default function SettingsPage() {
                     onChange={(e) => setElectricityRate(e.target.value)}
                     required
                     disabled={loading}
+                    autoComplete="off"
                   />
                 </div>
 
@@ -205,6 +209,7 @@ export default function SettingsPage() {
                     onChange={(e) => setColdWaterRate(e.target.value)}
                     required
                     disabled={loading}
+                    autoComplete="off"
                   />
                 </div>
 
@@ -218,6 +223,7 @@ export default function SettingsPage() {
                     onChange={(e) => setHotWaterRate(e.target.value)}
                     required
                     disabled={loading}
+                    autoComplete="off"
                   />
                 </div>
               </div>
@@ -259,6 +265,7 @@ export default function SettingsPage() {
                 onChange={(e) => setOldPassword(e.target.value)}
                 required
                 disabled={passwordLoading}
+                autoComplete="current-password"
               />
             </div>
 
@@ -272,6 +279,7 @@ export default function SettingsPage() {
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
                 disabled={passwordLoading}
+                autoComplete="new-password"
               />
             </div>
 
@@ -285,6 +293,7 @@ export default function SettingsPage() {
                 onChange={(e) => setConfirmNewPassword(e.target.value)}
                 required
                 disabled={passwordLoading}
+                autoComplete="new-password"
               />
             </div>
 

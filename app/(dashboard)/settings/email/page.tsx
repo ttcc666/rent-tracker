@@ -331,6 +331,7 @@ export default function EmailSettingsPage() {
                 value={userEmail}
                 onChange={(e) => setUserEmail(e.target.value)}
                 disabled={saveLoading}
+                autoComplete="email"
               />
             </div>
             <div className="flex items-end">
@@ -388,6 +389,7 @@ export default function EmailSettingsPage() {
                 value={smtpConfig.smtpHost}
                 onChange={(e) => setSmtpConfig(prev => ({ ...prev, smtpHost: e.target.value }))}
                 disabled={saveLoading}
+                autoComplete="off"
               />
             </div>
 
@@ -400,6 +402,7 @@ export default function EmailSettingsPage() {
                 value={smtpConfig.smtpPort}
                 onChange={(e) => setSmtpConfig(prev => ({ ...prev, smtpPort: e.target.value }))}
                 disabled={saveLoading}
+                autoComplete="off"
               />
             </div>
 
@@ -412,6 +415,7 @@ export default function EmailSettingsPage() {
                 value={smtpConfig.smtpUser}
                 onChange={(e) => handleSmtpUserChange(e.target.value)}
                 disabled={saveLoading}
+                autoComplete="email"
               />
             </div>
 
@@ -424,6 +428,7 @@ export default function EmailSettingsPage() {
                 value={smtpConfig.smtpPassword}
                 onChange={(e) => setSmtpConfig(prev => ({ ...prev, smtpPassword: e.target.value }))}
                 disabled={saveLoading}
+                autoComplete="current-password"
               />
             </div>
 
@@ -435,6 +440,7 @@ export default function EmailSettingsPage() {
                 value={smtpConfig.fromName}
                 onChange={(e) => setSmtpConfig(prev => ({ ...prev, fromName: e.target.value }))}
                 disabled={saveLoading}
+                autoComplete="name"
               />
             </div>
 
@@ -447,6 +453,7 @@ export default function EmailSettingsPage() {
                 value={smtpConfig.fromEmail}
                 onChange={(e) => setSmtpConfig(prev => ({ ...prev, fromEmail: e.target.value }))}
                 disabled={saveLoading}
+                autoComplete="email"
               />
             </div>
           </div>

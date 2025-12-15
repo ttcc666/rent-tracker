@@ -115,6 +115,7 @@ export default function SetupPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  autoComplete="new-password"
                 />
               </div>
 
@@ -127,6 +128,7 @@ export default function SetupPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
+                  autoComplete="new-password"
                 />
               </div>
 
@@ -156,6 +158,7 @@ export default function SetupPage() {
                       value={monthlyRent}
                       onChange={(e) => setMonthlyRent(e.target.value)}
                       required
+                      autoComplete="off"
                     />
                   </div>
 
@@ -170,6 +173,7 @@ export default function SetupPage() {
                       value={paymentDay}
                       onChange={(e) => setPaymentDay(e.target.value)}
                       required
+                      autoComplete="off"
                     />
                   </div>
                 </div>
@@ -184,6 +188,7 @@ export default function SetupPage() {
                     value={deposit}
                     onChange={(e) => setDeposit(e.target.value)}
                     required
+                    autoComplete="off"
                   />
                 </div>
               </div>
@@ -202,6 +207,7 @@ export default function SetupPage() {
                       value={electricityRate}
                       onChange={(e) => setElectricityRate(e.target.value)}
                       required
+                      autoComplete="off"
                     />
                   </div>
 
@@ -215,6 +221,7 @@ export default function SetupPage() {
                       value={coldWaterRate}
                       onChange={(e) => setColdWaterRate(e.target.value)}
                       required
+                      autoComplete="off"
                     />
                   </div>
 
@@ -228,6 +235,7 @@ export default function SetupPage() {
                       value={hotWaterRate}
                       onChange={(e) => setHotWaterRate(e.target.value)}
                       required
+                      autoComplete="off"
                     />
                   </div>
                 </div>

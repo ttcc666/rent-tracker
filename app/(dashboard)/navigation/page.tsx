@@ -210,31 +210,32 @@ export default function NavigationPage() {
         <Card className="bg-muted/50">
           <CardHeader>
             <CardTitle className="text-lg">系统功能概览</CardTitle>
-            <CardDescription>
-              <div className="grid gap-2 mt-4 text-sm">
-                <div className="flex justify-between">
-                  <span>✅ 租金记录管理</span>
-                  <span className="text-muted-foreground">已启用</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>✅ 数据可视化</span>
-                  <span className="text-muted-foreground">已启用</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>✅ Excel 导出</span>
-                  <span className="text-muted-foreground">已启用</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>✅ 邮件通知系统</span>
-                  <span className="text-muted-foreground">已启用</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>✅ 定时任务 (Cron)</span>
-                  <span className="text-muted-foreground">已启用</span>
-                </div>
-              </div>
-            </CardDescription>
+            <CardDescription>查看系统中已启用的功能模块</CardDescription>
           </CardHeader>
+          <CardContent>
+            <div className="grid gap-2 text-sm">
+              <div className="flex justify-between">
+                <span>✅ 租金记录管理</span>
+                <span className="text-muted-foreground">已启用</span>
+              </div>
+              <div className="flex justify-between">
+                <span>✅ 数据可视化</span>
+                <span className="text-muted-foreground">已启用</span>
+              </div>
+              <div className="flex justify-between">
+                <span>✅ Excel 导出</span>
+                <span className="text-muted-foreground">已启用</span>
+              </div>
+              <div className="flex justify-between">
+                <span>✅ 邮件通知系统</span>
+                <span className="text-muted-foreground">已启用</span>
+              </div>
+              <div className="flex justify-between">
+                <span>✅ 定时任务 (Cron)</span>
+                <span className="text-muted-foreground">已启用</span>
+              </div>
+            </div>
+          </CardContent>
         </Card>
       </div>
     </div>
