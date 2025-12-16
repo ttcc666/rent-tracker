@@ -17,9 +17,16 @@
 2. 创建新项目
 3. 在 Settings → Database 中找到连接字符串
 
-### 2. 生成 AUTH_SECRET
+### 2. 生成密钥
 
-在终端运行：
+在终端运行以下命令生成密钥：
+
+**AUTH_SECRET（认证密钥）**
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+```
+
+**CRON_SECRET（定时任务密钥）**
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 ```
@@ -42,7 +49,8 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
    - 选择你的 Git 仓库
    - 配置环境变量：
      - `DATABASE_URL`: 你的数据库连接字符串
-     - `AUTH_SECRET`: 生成的密钥
+     - `AUTH_SECRET`: 生成的认证密钥
+     - `CRON_SECRET`: 生成的定时任务密钥
    - 点击 Deploy
 
 3. **初始化数据库**
@@ -72,6 +80,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
    ```bash
    vercel env add DATABASE_URL
    vercel env add AUTH_SECRET
+   vercel env add CRON_SECRET
    ```
 
 5. **生产部署**
@@ -85,7 +94,8 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 
 | 变量名 | 值 | 环境 |
 |--------|-----|------|
-| `DATABASE_URL` | `postgresql://user:pass@host/db` | Production, Preview, Development |
+| `DATABASE_URL` | `postgres认证密钥ql://user:pass@host/db` | Production, Preview, Development |
+| `CRON_SECRET` | 生成的 32+ 字符定时任务 | Production, Preview, Development |
 | `AUTH_SECRET` | 生成的 32+ 字符密钥 | Production, Preview, Development |
 
 ## 数据库迁移
@@ -96,7 +106,44 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 2. 或使用 Vercel CLI：
    ```bash
    vercel env pull .env.local
-   pnpm prisma migrate deploy
+   pnp
+
+## 定时任务配置
+
+本项目使用 Vercel Cron Jobs 实现定时任务（付款提醒、逾期提醒等）。
+
+### 配置步骤
+
+1. **确保 `vercel.json` 已配置**（项目已包含）
+   ```json
+   {
+     "crons": [
+       {
+         "path": "/api/cron/daily",
+         "schedule": "0 9 * * *"
+       },
+       {
+         "path": "/api/cron/monthly",
+         "schedule": "0 0 1 * *"
+       }
+     ]
+   }
+   ```
+
+2. **验证定时任务**
+   - 部署后访问 Vercel Dashboard → Settings → Cron Jobs
+   - 确认任务已自动注册
+
+3. **手动测试定时任务**
+   ```bash
+   curl -X POST https://your-domain.vercel.app/api/cron/daily \
+     -H "Authorization: Bearer YOUR_CRON_SECRET"
+   ```
+
+### 定时任务说明
+
+- **每日任务** (`/api/cron/daily`): 每天 9:00 执行，发送付款提醒和逾期提醒
+- **每月任务** (`/api/cron/monthly`): 每月 1 号执行，发送月度账单m prisma migrate deploy
    ```
 
 ## 常见问题

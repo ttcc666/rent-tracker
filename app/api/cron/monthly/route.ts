@@ -4,6 +4,8 @@ import { emailTemplateService } from '@/lib/email-templates';
 import { EmailType } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 // 这个 API 路由由 Vercel Cron Jobs 调用
 // Cron 计划: 每月1号 UTC 01:00 (北京时间 09:00) 执行
 

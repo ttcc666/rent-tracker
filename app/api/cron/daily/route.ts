@@ -5,6 +5,8 @@ import { EmailType } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { calculateDaysUntilPayment } from '@/lib/date-utils';
 
+export const dynamic = 'force-dynamic';
+
 // 这个 API 路由由 Vercel Cron Jobs 调用
 // Cron 计划: 每天 UTC 00:00 (北京时间 08:00) 执行
 
