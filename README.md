@@ -54,7 +54,12 @@ pnpm install
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/rent_tracker?schema=public"
 
 # 认证密钥（至少 32 字符）
+# node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 AUTH_SECRET="your-secret-key-change-this-in-production-min-32-chars"
+
+# Cron 任务密钥（用于保护定时任务 API）
+# node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+CRON_SECRET="your-cron-secret-key-change-this-in-production"
 ```
 
 **连接字符串说明**：
